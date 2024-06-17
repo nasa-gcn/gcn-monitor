@@ -14,7 +14,7 @@ prometheus-client = "^0.17.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
-flake8 = "^6.1.0"
+flake8 = "^7.1.0"
 
 [tool.poetry.scripts]
 gcn-monitor = "gcn_monitor.cli:main"
