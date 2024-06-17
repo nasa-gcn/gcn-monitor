@@ -10,7 +10,7 @@ readme = "README.md"
 click = "^8.1.7"
 gcn-kafka = "^0.3.3"
 python = "^3.9"
-prometheus-client = "^0.17.1"
+prometheus-client = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
