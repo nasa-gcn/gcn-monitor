@@ -12,10 +12,6 @@ gcn-kafka = "^0.3.3"
 python = "^3.9"
 prometheus-client = "^0.20.0"
 
-[tool.poetry.group.dev.dependencies]
-black = "*"
-flake8 = "^7.1.0"
-
 [tool.poetry.scripts]
 gcn-monitor = "gcn_monitor.cli:main"
 
