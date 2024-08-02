@@ -6,6 +6,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 """Monitor Kafka consumer connectivity."""
+
 import json
 import logging
 
