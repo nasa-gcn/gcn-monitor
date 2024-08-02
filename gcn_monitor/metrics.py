@@ -30,3 +30,11 @@ broker_state = prometheus_client.Enum(
     subsystem="broker",
     labelnames=["name"],
 )
+
+received = prometheus_client.Counter(
+    "received",
+    "Kafka records received",
+    namespace="kafka",
+    subsystem="records",
+    labelnames=["topic", "partition"],
+)

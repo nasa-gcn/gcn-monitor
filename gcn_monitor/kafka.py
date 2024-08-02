@@ -42,3 +42,5 @@ def run():
                 log.error("topic %s: got error %s", topic, error)
             else:
                 log.info("topic %s: got message", topic)
+                partition = message.partition()
+                metrics.received.labels(topic, partition).inc()
