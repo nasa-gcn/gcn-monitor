@@ -51,7 +51,7 @@ def main(prometheus, loglevel):
     * Convert to upper-case.
     * Replace periods (`.`) with single underscores (`_`).
     * Replace dashes (`-`) with double underscores (`__`).
-    * Replace underscores (`-`) with triple underscores (`___`).
+    * Replace underscores (`_`) with triple underscores (`___`).
     """
     logging.basicConfig(level=loglevel)
 
