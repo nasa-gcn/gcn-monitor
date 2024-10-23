@@ -89,7 +89,7 @@ def parse_into_s3_object(message):
     )
 
 
-def run(bucketarn):
+def run(bucketName):
     log.info("Creating consumer")
     config = gcn_kafka.config_from_env()
     config["stats_cb"] = stats_cb
@@ -106,7 +106,7 @@ def run(bucketarn):
             topic = message.topic()
             key, body = parse_into_s3_object(message)
             s3_client.put_object(
-                Bucket=bucketarn.replace("arn:aws:s3:::", ""),
+                Bucket=bucketName,
                 Key=key,
                 Body=body,
             )

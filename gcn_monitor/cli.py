@@ -40,8 +40,8 @@ def host_port(host_port_str):
     show_default=True,
     help="Log level",
 )
-@click.option("--bucket-arn", help="Bucket ARN")
-def main(prometheus, loglevel, bucket_arn):
+@click.option("--bucket-name", help="Bucket Name")
+def main(prometheus, loglevel, bucket_name):
     """Monitor connectivity of a Kafka client.
 
     Specify the Kafka client configuration in environment variables using the
@@ -61,4 +61,4 @@ def main(prometheus, loglevel, bucket_arn):
     )
     log.info("Prometheus listening on %s", prometheus.netloc)
 
-    kafka.run(bucket_arn)
+    kafka.run(bucket_name)
