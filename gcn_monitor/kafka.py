@@ -9,7 +9,6 @@
 
 import json
 import logging
-import re
 
 import boto3
 import gcn_kafka
@@ -24,20 +23,6 @@ def stats_cb(data):
     stats = json.loads(data)
     for broker in stats["brokers"].values():
         metrics.broker_state.labels(broker["name"]).state(broker["state"])
-
-
-def sanitize_topic(topic):
-    """Replaces invalid characters in the topic string so it can be used as a file name
-
-    Args:
-        topic (string): Kafka message topic
-
-    Returns:
-        safe_name: A formatted version of the topic string with underscores(`_`) in place of illegal characters
-    """
-    invalid_chars = r'[\/:*?"<>|]'
-    safe_name = re.sub(invalid_chars, "_", topic)
-    return safe_name.strip()
 
 
 def parse_into_s3_object(message):
@@ -62,7 +47,8 @@ def parse_into_s3_object(message):
         - value
 
     """
-    topic = sanitize_topic(message.topic())
+    # Kafka limits topic characters to ASCII alphanumerics, '.', '_' and '-'
+    topic = message.topic()
     offset = message.offset()
     partition = message.partition()
     key = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.json"
