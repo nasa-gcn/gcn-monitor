@@ -25,6 +25,23 @@ def stats_cb(data):
         metrics.broker_state.labels(broker["name"]).state(broker["state"])
 
 
+def format_object(o):
+    if type(o) is bytes:
+        try:
+            return o.decode()
+        except UnicodeDecodeError as e:
+            print(e)
+            return o.decode("latin-1")
+    else:
+        return str(o)
+
+
+def get_json(obj):
+    return json.loads(
+        json.dumps(obj, default=lambda o: getattr(o, "__dict__", format_object(o)))
+    )
+
+
 def parse_into_s3_object(message):
     """Parses a Kafka message into a key and body.
 
@@ -57,22 +74,20 @@ def parse_into_s3_object(message):
         for method_name in dir(message)
         if not method_name.startswith("__") and not method_name.startswith("set_")
     ]
-    return key, dict(
-        [
-            (
-                messageKey,
-                (
-                    getattr(message, messageKey)().decode()
-                    if isinstance(attr_value := getattr(message, messageKey)(), bytes)
-                    and callable(getattr(message, messageKey))
-                    else attr_value()
-                    if callable(attr_value)
-                    else attr_value
-                ),
-            )
-            for messageKey in properties
-        ]
-    )
+
+    value = {}
+    for messageKey in properties:
+        attr_value = getattr(message, messageKey)
+        if isinstance(attr_value(), bytes) and callable(attr_value):
+            value[messageKey] = attr_value().decode()
+        elif callable(attr_value):
+            value[messageKey] = attr_value()
+        elif isinstance(attr_value, bytes):
+            value[messageKey] = attr_value.decode()
+        else:
+            value[messageKey] = attr_value
+
+    return key, get_json(value)
 
 
 def run(bucketName):
