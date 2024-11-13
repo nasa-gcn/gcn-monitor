@@ -42,52 +42,28 @@ def get_json(obj):
     )
 
 
-def parse_into_s3_object(message):
-    """Parses a Kafka message into a key and body.
+def parse_filenames(message):
+    """Parses a Kafka message into a file names for s3 upload.
 
     Args:
         message (Message): Any Kafka message
 
     Returns:
-        key (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
-
-        body (dict): The Kafka message converted to a dict to be JSON serializable to include all fields available, such as:
-        - error
-        - headers
-        - key
-        - latency
-        - leader_epoch
-        - offset
-        - partition
-        - timestamp
-        - topic
-        - value
+        fileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+        messageKeyFileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+        headersFileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
 
     """
     # Kafka limits topic characters to ASCII alphanumerics, '.', '_' and '-'
     topic = message.topic()
     offset = message.offset()
     partition = message.partition()
-    key = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.json"
-    properties = [
-        method_name
-        for method_name in dir(message)
-        if not method_name.startswith("__") and not method_name.startswith("set_")
-    ]
+    # <prefix>/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>
+    fileName = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
+    messageKeyFileName = f"{fileName}.keys.bin" if message.key() else None
+    headersFileName = f"{fileName}.headers.bin" if message.headers() else None
 
-    value = {}
-    for messageKey in properties:
-        attr_value = getattr(message, messageKey)
-        if isinstance(attr_value(), bytes) and callable(attr_value):
-            value[messageKey] = attr_value().decode()
-        elif callable(attr_value):
-            value[messageKey] = attr_value()
-        elif isinstance(attr_value, bytes):
-            value[messageKey] = attr_value.decode()
-        else:
-            value[messageKey] = attr_value
-
-    return key, get_json(value)
+    return fileName, messageKeyFileName, headersFileName
 
 
 def run(bucketName):
@@ -105,12 +81,27 @@ def run(bucketName):
     while True:
         for message in consumer.consume(timeout=1):
             topic = message.topic()
-            key, body = parse_into_s3_object(message)
+            fileName, messageKeyFileName, headersFileName = parse_filenames(message)
             s3_client.put_object(
                 Bucket=bucketName,
-                Key=key,
-                Body=body,
+                Key=fileName,
+                Body=message.value(),
             )
+
+            if messageKeyFileName is not None:
+                s3_client.put_object(
+                    Bucket=bucketName,
+                    Key=messageKeyFileName,
+                    Body=message.key(),
+                )
+
+            if headersFileName is not None:
+                s3_client.put_object(
+                    Bucket=bucketName,
+                    Key=headersFileName,
+                    Body=message.headers(),
+                )
+
             if error := message.error():
                 log.error("topic %s: got error %s", topic, error)
             else:
