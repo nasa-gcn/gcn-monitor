@@ -58,7 +58,6 @@ def parse_filenames(message):
     topic = message.topic()
     offset = message.offset()
     partition = message.partition()
-    # <prefix>/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>
     fileName = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
     messageKeyFileName = f"{fileName}.keys.bin" if message.key() else None
     headersFileName = f"{fileName}.headers.bin" if message.headers() else None
