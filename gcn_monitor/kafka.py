@@ -25,23 +25,6 @@ def stats_cb(data):
         metrics.broker_state.labels(broker["name"]).state(broker["state"])
 
 
-def format_object(o):
-    if type(o) is bytes:
-        try:
-            return o.decode()
-        except UnicodeDecodeError as e:
-            print(e)
-            return o.decode("latin-1")
-    else:
-        return str(o)
-
-
-def get_json(obj):
-    return json.loads(
-        json.dumps(obj, default=lambda o: getattr(o, "__dict__", format_object(o)))
-    )
-
-
 def parse_filenames(message):
     """Parses a Kafka message into a file names for s3 upload.
 
