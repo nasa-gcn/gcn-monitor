@@ -41,11 +41,11 @@ def parse_filenames(message):
     topic = message.topic()
     offset = message.offset()
     partition = message.partition()
-    fileName = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
-    messageKeyFileName = f"{fileName}.keys.bin" if message.key() else None
-    headersFileName = f"{fileName}.headers.bin" if message.headers() else None
+    file_name = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
+    message_key_file_name = f"{file_name}.keys.bin" if message.key() else None
+    headers_file_name = f"{file_name}.headers.bin" if message.headers() else None
 
-    return fileName, messageKeyFileName, headersFileName
+    return file_name, message_key_file_name, headers_file_name
 
 
 def run(bucketName):
@@ -63,24 +63,26 @@ def run(bucketName):
     while True:
         for message in consumer.consume(timeout=1):
             topic = message.topic()
-            fileName, messageKeyFileName, headersFileName = parse_filenames(message)
+            file_name, message_key_file_name, headers_file_name = parse_filenames(
+                message
+            )
             s3_client.put_object(
                 Bucket=bucketName,
-                Key=fileName,
+                Key=file_name,
                 Body=message.value(),
             )
 
-            if messageKeyFileName is not None:
+            if message_key_file_name is not None:
                 s3_client.put_object(
                     Bucket=bucketName,
-                    Key=messageKeyFileName,
+                    Key=message_key_file_name,
                     Body=message.key(),
                 )
 
-            if headersFileName is not None:
+            if headers_file_name is not None:
                 s3_client.put_object(
                     Bucket=bucketName,
-                    Key=headersFileName,
+                    Key=headers_file_name,
                     Body=message.headers(),
                 )
 
