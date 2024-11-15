@@ -83,7 +83,9 @@ def run(bucketName):
                 s3_client.put_object(
                     Bucket=bucketName,
                     Key=headers_file_name,
-                    Body=message.headers(),
+                    Body=json.dumps(
+                        dict(message.headers()), indent=2, default=lambda x: x.decode()
+                    ).encode(),
                 )
 
             if error := message.error():
