@@ -9,6 +9,7 @@
 
 import json
 import logging
+from base64 import b64encode
 
 import boto3
 import gcn_kafka
@@ -43,7 +44,7 @@ def parse_filenames(message):
     partition = message.partition()
     file_name = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
     message_key_file_name = f"{file_name}.keys.bin" if message.key() else None
-    headers_file_name = f"{file_name}.headers.bin" if message.headers() else None
+    headers_file_name = f"{file_name}.headers.json" if message.headers() else None
 
     return file_name, message_key_file_name, headers_file_name
 
@@ -83,9 +84,10 @@ def run(bucketName):
                 s3_client.put_object(
                     Bucket=bucketName,
                     Key=headers_file_name,
-                    Body=json.dumps(
-                        dict(message.headers()), indent=2, default=lambda x: x.decode()
-                    ).encode(),
+                    Body={
+                        key: b64encode(value).decode()
+                        for key, value in message.headers()
+                    },
                 )
 
             if error := message.error():
