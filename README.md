@@ -49,3 +49,5 @@ and subsequently stored as:
 ```
 {'header1': 'dmFsdWU=', 'header2': 'dmFsdWUy'}
 ```
+
+This varies from the connector behavior slightly in that the connector's json converter classes base the output json structure on some provided schema. This should not have any impact on loss of data between the two methods.
