@@ -43,7 +43,7 @@ def parse_filenames(message):
     offset = message.offset()
     partition = message.partition()
     file_name = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
-    message_key_file_name = f"{file_name}.keys.bin" if message.key() else None
+    message_key_file_name = f"{file_name}.key.bin" if message.key() else None
     headers_file_name = f"{file_name}.headers.json" if message.headers() else None
 
     return file_name, message_key_file_name, headers_file_name
