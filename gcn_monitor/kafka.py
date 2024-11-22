@@ -29,14 +29,30 @@ def stats_cb(data):
 def parse_filenames(message):
     """Parses a Kafka message into a file names for s3 upload.
 
-    Args:
-        message (Message): Any Kafka message
+    Parameters
+    ----------
+    message : Message
+        Any Kafka message.
 
-    Returns:
-        fileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
-        messageKeyFileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
-        headersFileName (string): The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+    Returns
+    -------
+    fileName: string
+        The Kafka topic corresponding to the notice type.
+    fileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+    messageKeyFileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+    headersFileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>` defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
 
+
+    Example
+    -------
+
+    >>> for message in consumer.consume(timeout=1):
+            file_name, message_key_file_name, headers_file_name = parse_filenames(
+                message
+            )
     """
     # Kafka limits topic characters to ASCII alphanumerics, '.', '_' and '-'
     topic = message.topic()
