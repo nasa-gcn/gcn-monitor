@@ -32,3 +32,22 @@ This package uses [Poetry](https://python-poetry.org) for packaging and Python v
 5.  Run the following command to launch a shell that is preconfigured with the project's virtual environment:
 
         poetry shell
+
+
+## S3 Output
+
+We are not currently using the S3 Sink connector. In its place, in `kafka.py` we are uploading files directly to an S3 bucket. The raw message value is uploaded as-is (a byte string). If a key is present on the message, it is also stored as a byte string. If headers are included in the message, their key-value pairs are parsed and stored as a JSON object, where the value is a base64 encoded string.
+
+For example:
+
+Headers provided in a message would be read in a python consumer from the `message.headers()` function as:
+```
+ [('header1', b'value'), ('header2', b'value2')]
+```
+and subsequently stored as:
+
+```
+{'header1': 'dmFsdWU=', 'header2': 'dmFsdWUy'}
+```
+
+This varies from the connector behavior slightly in that the connector's json converter classes base the output json structure on some provided schema. This should not have any impact on loss of data between the two methods.

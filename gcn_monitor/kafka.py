@@ -9,12 +9,15 @@
 
 import json
 import logging
+from base64 import b64encode
 
+import boto3
 import gcn_kafka
 
 from . import metrics
 
 log = logging.getLogger(__name__)
+s3_client = boto3.client("s3")
 
 
 def stats_cb(data):
@@ -23,7 +26,45 @@ def stats_cb(data):
         metrics.broker_state.labels(broker["name"]).state(broker["state"])
 
 
-def run():
+def parse_filenames(message):
+    """Parses a Kafka message into a file names for s3 upload.
+
+    Parameters
+    ----------
+    message : Message
+        Any Kafka message.
+
+    Returns
+    -------
+    fileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.bin`
+        This format for all returned names is defined at https://docs.confluent.io/kafka-connectors/s3-sink/current/overview.html#s3-object-names
+    messageKeyFileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>.key.bin`
+    headersFileName: string
+        The Key for S3's put_object method, formatted as `topics/<topic>/<encodedPartition>/<topic>+<kafkaPartition>+<startOffset>.<format>.headers.json`
+
+
+    Example
+    -------
+
+    >>> for message in consumer.consume(timeout=1):
+            file_name, message_key_file_name, headers_file_name = parse_filenames(
+                message
+            )
+    """
+    # Kafka limits topic characters to ASCII alphanumerics, '.', '_' and '-'
+    topic = message.topic()
+    offset = message.offset()
+    partition = message.partition()
+    file_name = f"topics/{topic}/partition={partition}/{topic}+{partition}+{offset}.bin"
+    message_key_file_name = f"{file_name}.key.bin" if message.key() else None
+    headers_file_name = f"{file_name}.headers.json" if message.headers() else None
+
+    return file_name, message_key_file_name, headers_file_name
+
+
+def run(bucketName):
     log.info("Creating consumer")
     config = gcn_kafka.config_from_env()
     config["stats_cb"] = stats_cb
@@ -38,6 +79,32 @@ def run():
     while True:
         for message in consumer.consume(timeout=1):
             topic = message.topic()
+            file_name, message_key_file_name, headers_file_name = parse_filenames(
+                message
+            )
+            s3_client.put_object(
+                Bucket=bucketName,
+                Key=file_name,
+                Body=message.value(),
+            )
+
+            if message_key_file_name is not None:
+                s3_client.put_object(
+                    Bucket=bucketName,
+                    Key=message_key_file_name,
+                    Body=message.key(),
+                )
+
+            if headers_file_name is not None:
+                s3_client.put_object(
+                    Bucket=bucketName,
+                    Key=headers_file_name,
+                    Body={
+                        key: b64encode(value).decode()
+                        for key, value in message.headers()
+                    },
+                )
+
             if error := message.error():
                 log.error("topic %s: got error %s", topic, error)
             else:
