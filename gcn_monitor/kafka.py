@@ -78,32 +78,6 @@ def run():
     while True:
         for message in consumer.consume(timeout=1):
             topic = message.topic()
-            # file_name, message_key_file_name, headers_file_name = parse_filenames(
-            #     message
-            # )
-            # s3_client.put_object(
-            #     Bucket=bucketName,
-            #     Key=file_name,
-            #     Body=message.value(),
-            # )
-
-            # if message_key_file_name is not None:
-            #     s3_client.put_object(
-            #         Bucket=bucketName,
-            #         Key=message_key_file_name,
-            #         Body=message.key(),
-            #     )
-
-            # if headers_file_name is not None:
-            #     s3_client.put_object(
-            #         Bucket=bucketName,
-            #         Key=headers_file_name,
-            #         Body={
-            #             key: b64encode(value).decode()
-            #             for key, value in message.headers()
-            #         },
-            #     )
-
             if error := message.error():
                 log.error("topic %s: got error %s", topic, error)
             else:
