@@ -9,7 +9,6 @@
 
 import json
 import logging
-from base64 import b64encode
 
 import boto3
 import gcn_kafka
@@ -64,7 +63,7 @@ def parse_filenames(message):
     return file_name, message_key_file_name, headers_file_name
 
 
-def run(bucketName):
+def run():
     log.info("Creating consumer")
     config = gcn_kafka.config_from_env()
     config["stats_cb"] = stats_cb
@@ -79,31 +78,31 @@ def run(bucketName):
     while True:
         for message in consumer.consume(timeout=1):
             topic = message.topic()
-            file_name, message_key_file_name, headers_file_name = parse_filenames(
-                message
-            )
-            s3_client.put_object(
-                Bucket=bucketName,
-                Key=file_name,
-                Body=message.value(),
-            )
+            # file_name, message_key_file_name, headers_file_name = parse_filenames(
+            #     message
+            # )
+            # s3_client.put_object(
+            #     Bucket=bucketName,
+            #     Key=file_name,
+            #     Body=message.value(),
+            # )
 
-            if message_key_file_name is not None:
-                s3_client.put_object(
-                    Bucket=bucketName,
-                    Key=message_key_file_name,
-                    Body=message.key(),
-                )
+            # if message_key_file_name is not None:
+            #     s3_client.put_object(
+            #         Bucket=bucketName,
+            #         Key=message_key_file_name,
+            #         Body=message.key(),
+            #     )
 
-            if headers_file_name is not None:
-                s3_client.put_object(
-                    Bucket=bucketName,
-                    Key=headers_file_name,
-                    Body={
-                        key: b64encode(value).decode()
-                        for key, value in message.headers()
-                    },
-                )
+            # if headers_file_name is not None:
+            #     s3_client.put_object(
+            #         Bucket=bucketName,
+            #         Key=headers_file_name,
+            #         Body={
+            #             key: b64encode(value).decode()
+            #             for key, value in message.headers()
+            #         },
+            #     )
 
             if error := message.error():
                 log.error("topic %s: got error %s", topic, error)
