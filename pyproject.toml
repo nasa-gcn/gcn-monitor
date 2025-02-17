@@ -11,7 +11,7 @@ click = "^8.1.8"
 gcn-kafka = "^0.3.3"
 python = "^3.9"
 prometheus-client = "^0.21.1"
-boto3 = "^1.35.72"
+boto3 = "^1.36.21"
 # workaround for: https://github.com/python-poetry/poetry-plugin-export/issues/183
 urllib3 = ">=1.25.4,<1.27"
 pytest = "^8.3.4"
