@@ -16,32 +16,32 @@ cryptography = "*"
 
 [[package]]
 name = "boto3"
-version = "1.35.72"
+version = "1.36.26"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.35.72-py3-none-any.whl", hash = "sha256:410bb4ec676c57ee9c3c7824b7b1a3721584f18f8ee8ccc8e8ecdf285136b77f"},
-    {file = "boto3-1.35.72.tar.gz", hash = "sha256:f9fc94413a959c388b1654c6687a5193293f3c69f8d0af3b86fd48b4096a23f3"},
+    {file = "boto3-1.36.26-py3-none-any.whl", hash = "sha256:f67d014a7c5a3cd540606d64d7cb9eec3600cf42acab1ac0518df9751ae115e2"},
+    {file = "boto3-1.36.26.tar.gz", hash = "sha256:523b69457eee55ac15aa707c0e768b2a45ca1521f95b2442931090633ec72458"},
 ]
 
 [package.dependencies]
-botocore = ">=1.35.72,<1.36.0"
+botocore = ">=1.36.26,<1.37.0"
 jmespath = ">=0.7.1,<2.0.0"
-s3transfer = ">=0.10.0,<0.11.0"
+s3transfer = ">=0.11.0,<0.12.0"
 
 [package.extras]
 crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.72"
+version = "1.36.26"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.72-py3-none-any.whl", hash = "sha256:7412877c3f766a1bfd09236e225ce1f0dc2c35e47949ae423e56e2093c8fa23a"},
-    {file = "botocore-1.35.72.tar.gz", hash = "sha256:6b5fac38ef7cfdbc7781a751e0f78833ccb9149ba815bc238b1dbb75c90fbae5"},
+    {file = "botocore-1.36.26-py3-none-any.whl", hash = "sha256:4e3f19913887a58502e71ef8d696fe7eaa54de7813ff73390cd5883f837dfa6e"},
+    {file = "botocore-1.36.26.tar.gz", hash = "sha256:4a63bcef7ecf6146fd3a61dc4f9b33b7473b49bdaf1770e9aaca6eee0c9eab62"},
 ]
 
 [package.dependencies]
@@ -53,7 +53,7 @@ urllib3 = [
 ]
 
 [package.extras]
-crt = ["awscrt (==0.22.0)"]
+crt = ["awscrt (==0.23.8)"]
 
 [[package]]
 name = "certifi"
@@ -623,20 +623,20 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "s3transfer"
-version = "0.10.2"
+version = "0.11.2"
 description = "An Amazon S3 Transfer Manager"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "s3transfer-0.10.2-py3-none-any.whl", hash = "sha256:eca1c20de70a39daee580aef4986996620f365c4e0fda6a86100231d62f1bf69"},
-    {file = "s3transfer-0.10.2.tar.gz", hash = "sha256:0711534e9356d3cc692fdde846b4a1e4b0cb6519971860796e6bc4c7aea00ef6"},
+    {file = "s3transfer-0.11.2-py3-none-any.whl", hash = "sha256:be6ecb39fadd986ef1701097771f87e4d2f821f27f6071c872143884d2950fbc"},
+    {file = "s3transfer-0.11.2.tar.gz", hash = "sha256:3b39185cb72f5acc77db1a58b6e25b977f28d20496b6e58d6813d75f464d632f"},
 ]
 
 [package.dependencies]
-botocore = ">=1.33.2,<2.0a.0"
+botocore = ">=1.36.0,<2.0a.0"
 
 [package.extras]
-crt = ["botocore[crt] (>=1.33.2,<2.0a.0)"]
+crt = ["botocore[crt] (>=1.36.0,<2.0a.0)"]
 
 [[package]]
 name = "six"
@@ -679,4 +679,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "0ae1152d0b08a3daffb350719338191a0ca9754e97fa039a7c356b23131b05e5"
+content-hash = "af216e098468330193e704a1ebd8198b4db03e846f813201b27284af718c1367"
