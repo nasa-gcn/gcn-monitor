@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 click = "^8.1.8"
 gcn-kafka = "^0.3.3"
-python = "^3.9"
+python = "^3.10"
 prometheus-client = "^0.21.1"
 boto3 = "^1.35.72"
 # workaround for: https://github.com/python-poetry/poetry-plugin-export/issues/183
