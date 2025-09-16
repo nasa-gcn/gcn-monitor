@@ -15,7 +15,7 @@ boto3 = "^1.37.24"
 # workaround for: https://github.com/python-poetry/poetry-plugin-export/issues/183
 urllib3 = ">=1.25.4,<2.6"
 pytest = "^8.4.2"
-pytest-cov = "^6.3.0"
+pytest-cov = "^7.0.0"
 
 [tool.poetry.scripts]
 gcn-monitor = "gcn_monitor.cli:main"
