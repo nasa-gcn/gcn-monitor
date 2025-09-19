@@ -2,34 +2,34 @@
 
 [[package]]
 name = "boto3"
-version = "1.37.24"
+version = "1.40.34"
 description = "The AWS SDK for Python"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "boto3-1.37.24-py3-none-any.whl", hash = "sha256:2f2b8f82a5d7f89283973bf2cab771b90c09348799e78b2a25c60cd22c443514"},
-    {file = "boto3-1.37.24.tar.gz", hash = "sha256:1d3c6fc63a9efba0af8b531ec6b7f7c6b0ef197bf3dcd875f03c9097ac68b58f"},
+    {file = "boto3-1.40.34-py3-none-any.whl", hash = "sha256:6770478420b7383657c5f9c0805c6912eefb0dac9f1c54a32198b2a175feaa5c"},
+    {file = "boto3-1.40.34.tar.gz", hash = "sha256:e0e0cc46ba7596a75509caa21c1200a488cf0676a51c1bd9c01428886b43b7b8"},
 ]
 
 [package.dependencies]
-botocore = ">=1.37.24,<1.38.0"
+botocore = ">=1.40.34,<1.41.0"
 jmespath = ">=0.7.1,<2.0.0"
-s3transfer = ">=0.11.0,<0.12.0"
+s3transfer = ">=0.14.0,<0.15.0"
 
 [package.extras]
 crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.37.24"
+version = "1.40.34"
 description = "Low-level, data-driven core of boto 3."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "botocore-1.37.24-py3-none-any.whl", hash = "sha256:f1a55332cca85a6556af8941cccdaf5d2d00336647d9e89f31174f2361ffb4f2"},
-    {file = "botocore-1.37.24.tar.gz", hash = "sha256:a0bcc3c376a371f2c11afcbcc9917010c1c0a701d0e45d1ea3ec3bddeb06a8ff"},
+    {file = "botocore-1.40.34-py3-none-any.whl", hash = "sha256:b46d27550ed7e2ac7d5e2ce0ab7a95b7296076e64bc8a3c496e41ea1fc9abd4b"},
+    {file = "botocore-1.40.34.tar.gz", hash = "sha256:681b3751c430aa1d70c7117efec4faeeb745acd8646d1657456e282a3a400d3b"},
 ]
 
 [package.dependencies]
@@ -38,7 +38,7 @@ python-dateutil = ">=2.1,<3.0.0"
 urllib3 = {version = ">=1.25.4,<2.2.0 || >2.2.0,<3", markers = "python_version >= \"3.10\""}
 
 [package.extras]
-crt = ["awscrt (==0.23.8)"]
+crt = ["awscrt (==0.27.6)"]
 
 [[package]]
 name = "certifi"
@@ -421,14 +421,14 @@ six = ">=1.5"
 
 [[package]]
 name = "s3transfer"
-version = "0.11.4"
+version = "0.14.0"
 description = "An Amazon S3 Transfer Manager"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "s3transfer-0.11.4-py3-none-any.whl", hash = "sha256:ac265fa68318763a03bf2dc4f39d5cbd6a9e178d81cc9483ad27da33637e320d"},
-    {file = "s3transfer-0.11.4.tar.gz", hash = "sha256:559f161658e1cf0a911f45940552c696735f5c74e64362e515f333ebed87d679"},
+    {file = "s3transfer-0.14.0-py3-none-any.whl", hash = "sha256:ea3b790c7077558ed1f02a3072fb3cb992bbbd253392f4b6e9e8976941c7d456"},
+    {file = "s3transfer-0.14.0.tar.gz", hash = "sha256:eff12264e7c8b4985074ccce27a3b38a485bb7f7422cc8046fee9be4983e4125"},
 ]
 
 [package.dependencies]
@@ -483,4 +483,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "b6dbdbb20efa96090e9e72663d89eb86abae0576b6d2872bdfd62ed4b37c6903"
+content-hash = "8576f9845fb027713de66250ab7edfb3b8fdd8062f65bc2316efe26329bc18a4"
