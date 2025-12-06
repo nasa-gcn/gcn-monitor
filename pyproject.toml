@@ -14,7 +14,7 @@ prometheus-client = "^0.23.1"
 boto3 = "^1.37.24"
 # workaround for: https://github.com/python-poetry/poetry-plugin-export/issues/183
 urllib3 = ">=1.25.4,<2.7"
-pytest = "^9.0.0"
+pytest = "^9.0.1"
 pytest-cov = "^7.0.0"
 
 [tool.poetry.scripts]
