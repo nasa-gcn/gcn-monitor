@@ -10,7 +10,7 @@ readme = "README.md"
 click = "^8.3.0"
 gcn-kafka = "^0.3.4"
 python = "^3.10"
-prometheus-client = "^0.23.1"
+prometheus-client = "^0.24.0"
 boto3 = "^1.37.24"
 # workaround for: https://github.com/python-poetry/poetry-plugin-export/issues/183
 urllib3 = ">=1.25.4,<2.7"
