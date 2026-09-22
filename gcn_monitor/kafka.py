@@ -99,10 +99,12 @@ def run(bucket_name):
                 s3_client.put_object(
                     Bucket=bucket_name,
                     Key=headers_file_name,
-                    Body=json.dumps({
-                        key: b64encode(value).decode()
-                        for key, value in message.headers()
-                    }).encode(),
+                    Body=json.dumps(
+                        {
+                            key: b64encode(value).decode()
+                            for key, value in message.headers()
+                        }
+                    ).encode(),
                 )
             if error := message.error():
                 log.error("topic %s: got error %s", topic, error)
